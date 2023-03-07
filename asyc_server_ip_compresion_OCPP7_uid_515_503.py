@@ -14,6 +14,7 @@ print("The current time is", currentTime)
 
 Host = "192.168.3.77"
 SocketPort = 8080
+HeartbeatInterval = 5
 
 #EVSE > Server
 OCPP_CallResult_authorize_old= "[3,\r\n \"0401\",{\"expiryDate\":\"2022-12-07T20:11:11.111\", \"parentIdTag\":\"11111111\", \"status\":\"Accepted\"}]"
@@ -22,7 +23,7 @@ OCPP_CallResult_boot     = "[3,\r\n \"0402\",{\"status\":\"Accepted\", \"current
 OCPP_CallResult_heart     = "[3,\r\n \"0406\",{\"currentTime\":\"2066-06-06T20:66:66.6666\"}]"
 OCPP_CallResult_heart_w     = "[3,\r\n \"0406\",{\"currentTime\":\"%s\"}]"
 
-OCPP_CallResult_boot_r = "[3,\"ocppuid\",{\"status\":\"Accepted\",\"currentTime\":\"ocppcurrentTime\",\"interval\":50}]"
+OCPP_CallResult_boot_r = "[3,\"ocppuid\",{\"status\":\"Accepted\",\"currentTime\":\"ocppcurrentTime\",\"interval\":\"HeartbeatInterval\"}]"
 OCPP_CallResult_heart_r = "[3,\"ocppuid\",{\"currentTime\":\"ocppcurrentTime\"}]"
 
 #Server > EVSE
@@ -75,6 +76,7 @@ def replace_uid_time(input,output):
     output = output.replace('ocppuid',uid)
     t = get_current_time()
     output = output.replace('ocppcurrentTime',t)
+    output = output.replace('HeartbeatInterval',HeartbeatInterval)
     return output
 
 
