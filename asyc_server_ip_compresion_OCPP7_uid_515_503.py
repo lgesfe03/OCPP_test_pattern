@@ -23,7 +23,8 @@ OCPP_CallResult_boot     = "[3,\r\n \"0402\",{\"status\":\"Accepted\", \"current
 OCPP_CallResult_heart     = "[3,\r\n \"0406\",{\"currentTime\":\"2066-06-06T20:66:66.6666\"}]"
 OCPP_CallResult_heart_w     = "[3,\r\n \"0406\",{\"currentTime\":\"%s\"}]"
 
-OCPP_CallResult_boot_r = "[3,\"ocppuid\",{\"status\":\"Accepted\",\"currentTime\":\"ocppcurrentTime\",\"interval\":\"HeartbeatInterval\"}]"
+OCPP_CallResult_boot_r = "[3,\"ocppuid\",{\"status\":\"Accepted\",\"currentTime\":\"ocppcurrentTime\",\"interval\":%d}]" % (HeartbeatInterval)
+
 OCPP_CallResult_heart_r = "[3,\"ocppuid\",{\"currentTime\":\"ocppcurrentTime\"}]"
 
 #Server > EVSE
@@ -48,7 +49,7 @@ OCPP_CALL_SetChargingProfile2 = "[2,\"9f169b53-cd7f-4013-9bd2-072fdac0c1f0\",\"S
 OCPP_CALL_SetChargingProfile3 = "[2,\"bdcc70b1-7595-4c01-bd93-0e139982d05b\",\"SetChargingProfile\",{\"connectorId\":0,\"csChargingProfiles\":{\"chargingProfileId\":3,\"stackLevel\":33,\"chargingProfilePurpose\":\"ChargePointMaxProfile\",\"chargingProfileKind\":\"Relative\",\"recurrencyKind\":\"Weekly\",\"validFrom\":\"2023-01-03T08:50:00.000Z\",\"validTo\":\"2024-04-26T14:48:00.000Z\",\"chargingSchedule\":{\"duration\":3333,\"startSchedule\":\"2023-01-05T18:52:00.000Z\",\"chargingRateUnit\":\"W\",\"chargingSchedulePeriod\":[{\"startPeriod\":11,\"limit\":2.2,\"numberPhases\":33},{\"startPeriod\":44,\"limit\":5.5,\"numberPhases\":66},{\"startPeriod\":77,\"limit\":88.9,\"numberPhases\":99}],\"minChargingRate\":3.3}}}]"
 
 #OCPP_result_UpdateFirmware= "[2,\r\n \"19221119999\",\r\n \"UpdateFirmware\", \r\n {\"connectorId\":\"20221207777\", \"type\":\"Operative\"}]"
-count =0
+COUNT =0
 
 def find_uid(input):
     target_c = '\"'
@@ -76,10 +77,13 @@ def replace_uid_time(input,output):
     output = output.replace('ocppuid',uid)
     t = get_current_time()
     output = output.replace('ocppcurrentTime',t)
-    output = output.replace('HeartbeatInterval',HeartbeatInterval)
     return output
 
-
+def count_time():
+    global COUNT
+    COUNT +=1
+    COUNT &= 3
+    return COUNT
 
 async def WebSocketserver(websocket, path):
     while (1):
@@ -95,14 +99,13 @@ async def WebSocketserver(websocket, path):
         elif "Heartbeat" in Rxdata:
             tx = replace_uid_time(Rxdata,OCPP_CallResult_heart_r)
             await websocket.send(tx)
-            count +=1
-            count &= 3
-            if count == 0:
-                await websocket.send(OCPP_CALL_SetChargingProfile1)
-            elif count == 0:
+            count = count_time()
+            if count == 2:
+                await websocket.send(OCPP_CALL_SetChargingProfile3)
+            elif count == 1:
                 await websocket.send(OCPP_CALL_SetChargingProfile2)
             else:
-                await websocket.send(OCPP_CALL_SetChargingProfile3)
+                await websocket.send(OCPP_CALL_SetChargingProfile1)
             
             
             
