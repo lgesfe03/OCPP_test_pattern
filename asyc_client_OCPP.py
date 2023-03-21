@@ -1,7 +1,7 @@
 import asyncio
 import websockets
 from datetime import datetime
-from websocket import enableTrace, WebSocketApp
+# from websocket import enableTrace, WebSocketApp
 
 currentDateAndTime = datetime.now()
 print("The current date and time is", currentDateAndTime)
@@ -26,6 +26,8 @@ GET		    ="/steve/websocket/CentralSystemService/1"
 OCPP_CallResult_authorize_old   = "[3,\r\n \"0401\",{\"expiryDate\":\"2022-12-07T20:11:11.111\", \"parentIdTag\":\"11111111\", \"status\":\"Accepted\"}]"
 OCPP_CallResult_authorize       = "[3,\"0401\",{\"idTagInfo\":{\"status\":\"Invalid\"}}]"
 OCPP_CallResult_boot            = "[3,\r\n \"0402\",{\"status\":\"Accepted\", \"currentTime\":\"2013-02-01T22:22:22.222\", \"interval\":500}]"
+OCPP_CallResult_boot_ev         = "[2, \"20111111T11:11:25-cmd402\", \"BootNotification\", {    \"chargePointVendor\":    \"VendorHH_mark_home\",    \"chargePointModel\":    \"ModelFXN_mark_home\",    \"chargePointSerialNumber\":    \"CPSerialNumber99\",    \"chargeBoxSerialNumber\":    \"CBoxSerialNumber66\",    \"firmwareVersion\":    \"FW_v0.11\",    \"iccid\":    \"iccid44\",    \"imsi\":    \"imsi55\",    \"meterType\":    \"meterType66\",    \"meterSerialNumber\":    \"meterSerialNumber77\"}]"
+OCPP_CallResult_heart_ev        = "[2, \"20230204T07:02:38-cmd406\", \"Heartbeat\", {}]"
 OCPP_CallResult_heart           = "[3,\r\n \"0406\",{\"currentTime\":\"2066-06-06T20:66:66.6666\"}]"
 OCPP_CallResult_heart_w         = "[3,\r\n \"0406\",{\"currentTime\":\"%s\"}]"
 OCPP_CallResult_boot_r          = "[3,\"ocppuid\",{\"status\":\"Accepted\",\"currentTime\":\"ocppcurrentTime\",\"interval\":%d}]" % (HeartbeatInterval)
@@ -197,18 +199,20 @@ async def ws_client():
     header = " /steve/websocket/CentralSystemService/1"
     print(target_uri)
     async with websockets.connect(target_uri +header  ,origin=None, extensions=None, compression=None ,subprotocols=["ocpp1.6"] ) as websocket:
-        response = await websocket.recv()
-        print(response)
-        await websocket.send(header)
-        response = await websocket.recv()
-        print(response)
-        name = input("Your name?")
-
-        await websocket.send(name)
-        print(f"> {name}")
-
-        greeting = await websocket.recv()
-        print(f"< {greeting}")
+        await websocket.send(OCPP_CallResult_boot_ev)
+        Rxdata = await websocket.recv()
+        print(Rxdata)
+        while (1):
+            await asyncio.sleep(3)
+            await websocket.send(OCPP_CallResult_heart_ev)
+            Rxdata = await websocket.recv()
+            print(Rxdata)
+            # Rxdata = await websocket.recv()
+            # #print(f" Rx from EVSE:\r\n {Rxdata}\r\n")
+            # # await websocket.send("88:8088 get!")
+            # if "Authorize" in Rxdata:
+            #     await websocket.send(OCPP_CallResult_authorize)
+            
 
 asyncio.get_event_loop().run_until_complete(ws_client())
 
