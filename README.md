@@ -10,5 +10,5 @@ Client will need to connect to server and sending ceratin shakehand message by H
 
 reference documents:
 * OCPP-J 1.6 Specification
-* RFC6455] : The WebSocket Protocol
-* 
+* RFC6455 : The WebSocket Protocol
+
