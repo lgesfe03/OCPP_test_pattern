@@ -1,4 +1,3 @@
-"# OCPP_test_pattern" 
 
 Author : Mark Lin YL
 Date: 2023/04
