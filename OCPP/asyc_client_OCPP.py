@@ -18,7 +18,7 @@ SocketPort = 8080
 HeartbeatInterval = 1
 TEST_PATTERN_NUM = 7    #1、3、7、15、31、63
 #client use
-SERVER_IP   = "192.168.3.171"
+SERVER_IP   = "localhost"
 SERVER_PORT	= 8080
 GET		    ="/steve/websocket/CentralSystemService/1"	
 ###################################Arguments ##############################################
@@ -199,7 +199,7 @@ async def ws_client():
     target_uri_wwww = "ws://111.184.133.63:8080"
     header = " /steve/websocket/CentralSystemService/1"
     print(target_uri)
-    async with websockets.connect(target_uri_wwww +header  ,origin=None, extensions=None, compression=None ,subprotocols=["ocpp1.6"] ) as websocket:
+    async with websockets.connect("ws://localhost"  ,origin=None, extensions=None, compression=None ,subprotocols=["ocpp1.6"] ) as websocket:
         await websocket.send(OCPP_CallResult_boot_ev)
         Rxdata = await websocket.recv()
         print(Rxdata)

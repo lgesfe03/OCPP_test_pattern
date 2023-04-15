@@ -6,7 +6,7 @@ from websockets import serve
 import threading
 import asyncio
 
-IMAGE_PATH = "D:\Foxconn\EVSE\Code\Python_json\git\ico\ocpp16.jpg"
+IMAGE_PATH = "..\..\ico\ocpp16.jpg"
 
 class CounterThread(QThread):
     countChanged = Signal(int)
