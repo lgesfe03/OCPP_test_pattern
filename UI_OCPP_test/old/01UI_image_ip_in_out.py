@@ -58,7 +58,7 @@ class MainWindow(QMainWindow):
         self.printIpButton.setGeometry(10, self.current_height, 100, self.height_arranger(25))
         self.printIpButton.clicked.connect(self.printIpv4)
         # Create a label to display the entered IPv4 data
-        self.ipLabel = QLabel(self)
+        self.ipLabel = QLabel("info", self)
         self.ipLabel.setGeometry(10, self.current_height, 100, self.height_arranger(25))
 
         # Create a button to start the counting thread

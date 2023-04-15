@@ -198,8 +198,8 @@ async def ws_client():
     target_uri = "ws://192.168.3.171:8080"
     target_uri_wwww = "ws://111.184.133.63:8080"
     header = " /steve/websocket/CentralSystemService/1"
-    print(target_uri)
-    async with websockets.connect("ws://localhost"  ,origin=None, extensions=None, compression=None ,subprotocols=["ocpp1.6"] ) as websocket:
+    # print(target_uri)
+    async with websockets.connect(f"ws://{SERVER_IP}:{SERVER_PORT}"  ,origin=None, extensions=None, compression=None ,subprotocols=["ocpp1.6"] ) as websocket:
         await websocket.send(OCPP_CallResult_boot_ev)
         Rxdata = await websocket.recv()
         print(Rxdata)
