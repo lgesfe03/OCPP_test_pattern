@@ -18,7 +18,8 @@ SocketPort = 8080
 HeartbeatInterval = 1
 TEST_PATTERN_NUM = 7    #1、3、7、15、31、63
 #client use
-SERVER_IP   = "localhost"
+# SERVER_IP   = "localhost"
+SERVER_IP   = "192.168.3.171"
 SERVER_PORT	= 8080
 GET		    ="/steve/websocket/CentralSystemService/1"	
 ###################################Arguments ##############################################
