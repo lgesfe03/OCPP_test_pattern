@@ -13,7 +13,9 @@ Client will need to connect to server and sending ceratin shakehand message by H
 * RFC6455 : The WebSocket Protocol
 
 1.Python-3.11.9	
+
 Download from web Python 3.11.9
+
 2.Python-Websockets	
   ````
   pip install websockets==12
