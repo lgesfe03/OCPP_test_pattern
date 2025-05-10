@@ -12,3 +12,13 @@ Client will need to connect to server and sending ceratin shakehand message by H
 * OCPP-J 1.6 Specification
 * RFC6455 : The WebSocket Protocol
 
+1.Python-3.11.9	
+Download from web Python 3.11.9
+2.Python-Websockets	
+  ````
+  pip install websockets==12
+  ````
+3.Python-Selenium
+  ````
+  pip install selenium==4.27.1
+  ````
